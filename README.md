@@ -1,5 +1,11 @@
 # fruitplayer
 
+# INSTALL
+
+To install, run install.sh as root or using sudo
+
+# Usage
+
 To run fruitplayer, type "fruitplayer" into your terminal
 
 Hit a s d f or g on your keyboard to play the sounds
