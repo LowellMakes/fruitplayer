@@ -20,9 +20,9 @@ mkdir -p /usr/share/sounds/fruitplayer/
 cp -v *.wav /usr/share/sounds/fruitplayer/
 
 echo -e "\nCopying fruitplayer binary to /usr/bin/...\n"
-cp fruitplayer /usr/bin/
+cp -v fruitplayer /usr/bin/
 
-echo -e "Done. You can now delete this directory\n"
+echo -e "\nDone. You can now delete this directory\n"
 
 echo -e "To run fruitplayer, type \"fruitplayer\" into your terminal\n"
 echo -e "Hit a s d f or g on your keyboard to play the sounds\n"
