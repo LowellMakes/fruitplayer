@@ -1,0 +1,20 @@
+#!/bin/bash
+
+dir=/usr/share/sounds/fruitplayer
+while true; do
+read -s -n1 sound
+
+if [ $sound = a ] ; then
+	aplay $dir/coin.wav &
+elif [ $sound = s ] ; then
+	aplay $dir/fireball.wav &
+elif [ $sound = d ] ; then
+	aplay $dir/jump.wav &
+elif [ $sound = f ] ; then
+	aplay $dir/kick.wav &
+elif [ $sound = g ] ; then
+	aplay $dir/mip.wav &
+elif [ $sound = q ] ; then
+	exit 0
+fi
+done
