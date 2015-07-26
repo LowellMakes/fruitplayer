@@ -5,15 +5,15 @@ while true; do
 read -s -n1 sound
 
 if [ $sound = a ] ; then
-	aplay $dir/coin.wav &
+	aplay -q $dir/coin.wav & 
 elif [ $sound = s ] ; then
-	aplay $dir/fireball.wav &
+	aplay -q $dir/fireball.wav &
 elif [ $sound = d ] ; then
-	aplay $dir/jump.wav &
+	aplay -q $dir/jump.wav &
 elif [ $sound = f ] ; then
-	aplay $dir/kick.wav &
+	aplay -q $dir/kick.wav &
 elif [ $sound = g ] ; then
-	aplay $dir/mip.wav &
+	aplay -q $dir/mip.wav &
 elif [ $sound = q ] ; then
 	exit 0
 fi
