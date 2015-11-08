@@ -12,9 +12,9 @@ if [ $sound = a ] ; then
 	if [ $mode = mario ]; then
 		aplay -q $dir/coin.wav &
 	elif [ $mode = piano ];then
-		aplay -q $dir/a.wav & 
+		aplay -q $dir/a.wav &
 	fi
-	count=0	
+	count=0
 	last=$sound
 elif [ $sound = s ] ; then
 	if [ $banana = $rand ];then
@@ -26,34 +26,34 @@ elif [ $sound = s ] ; then
 			aplay -q $dir/fireball.wav &
 			(( banana++ ))
 		elif [ $mode = piano ];then
-			aplay -q $dir/b.wav & 
+			aplay -q $dir/b.wav &
 		fi
 	fi
-	count=0	
+	count=0
 	last=$sound
 elif [ $sound = d ] ; then
 	if [ $mode = mario ]; then
 		aplay -q $dir/jump.wav &
 	elif [ $mode = piano ]; then
-		aplay -q $dir/c.wav & 
+		aplay -q $dir/c.wav &
 	fi
-	count=0	
+	count=0
 	last=$sound
 elif [ $sound = f ] ; then
 	if [ $mode = mario ]; then
 		aplay -q $dir/kick.wav &
 	elif [ $mode = piano ]; then
-		aplay -q $dir/d.wav & 
+		aplay -q $dir/d.wav &
 	fi
-	count=0	
+	count=0
 	last=$sound
 elif [ $sound = g ] ; then
 	if [ $mode = mario ]; then
 		aplay -q $dir/mip.wav &
 	elif [ $mode = piano ]; then
-		aplay -q $dir/e.wav & 
+		aplay -q $dir/e.wav &
 	fi
-	count=0	
+	count=0
 	last=$sound
 elif [ $sound = q ] ; then
 	exit 0
@@ -63,9 +63,9 @@ elif [ $sound = w ] ; then
 	sudo shutdown -h now
 
 elif [ "$sound" = ' ' ]; then
-	if [ $last = g ] ;then 
+	if [ $last = g ] ;then
 		if [ $mode = mario ]; then
-			mode=piano 
+			mode=piano
 			echo "mode = $mode"
 		elif [ $mode = piano ]; then
 			mode=mario
@@ -76,7 +76,7 @@ elif [ "$sound" = ' ' ]; then
 		if [ $count = 0 ];then
 			sudo espeak -ven+f3 -k5 -s100 "$ip" 2>/dev/null
 			count=1
-			sleep 1 
+			sleep 1
 		fi
 	fi
 fi
