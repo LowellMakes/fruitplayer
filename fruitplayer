@@ -67,9 +67,11 @@ elif [ "$sound" = ' ' ]; then
 		if [ $mode = mario ]; then
 			mode=piano
 			echo "mode = $mode"
+			aplay -q $dir/area_tag.wav &
 		elif [ $mode = piano ]; then
 			mode=mario
 			echo "mode = $mode"
+			aplay -q $dir/area_tag.wav &
 		fi
 	else
 		ip=$(ip addr|grep "inet "|grep -v 127.0.0.1|awk '{print $2}'|awk -F/ '{print $1}'|grep -v ^$|head -n1)
