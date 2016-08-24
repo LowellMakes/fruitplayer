@@ -1,85 +1,89 @@
 #!/bin/bash
-
 mode=mario
 dir=/usr/share/sounds/fruitplayer
-aplay -q $dir/1up.wav
 count=0
 banana=0
 rand=$(( ( RANDOM % 25 )  + 15 ))
-while true; do
-IFS= read -r -s -n1 sound
-if [ $sound = a ] ; then
-	if [ $mode = mario ]; then
-		aplay -q $dir/coin.wav &
-	elif [ $mode = piano ];then
-		aplay -q $dir/a.wav &
-	fi
-	count=0
-	last=$sound
-elif [ $sound = s ] ; then
-	if [ $banana = $rand ];then
-		aplay -q $dir/banana.wav &
-		banana=0
-		rand=$(( ( RANDOM % 25 )  + 15 ))
-	else
-		if [ $mode = mario ]; then
-			aplay -q $dir/fireball.wav &
-			(( banana++ ))
-		elif [ $mode = piano ];then
-			aplay -q $dir/b.wav &
-		fi
-	fi
-	count=0
-	last=$sound
-elif [ $sound = d ] ; then
-	if [ $mode = mario ]; then
-		aplay -q $dir/jump.wav &
-	elif [ $mode = piano ]; then
-		aplay -q $dir/c.wav &
-	fi
-	count=0
-	last=$sound
-elif [ $sound = f ] ; then
-	if [ $mode = mario ]; then
-		aplay -q $dir/kick.wav &
-	elif [ $mode = piano ]; then
-		aplay -q $dir/d.wav &
-	fi
-	count=0
-	last=$sound
-elif [ $sound = g ] ; then
-	if [ $mode = mario ]; then
-		aplay -q $dir/mip.wav &
-	elif [ $mode = piano ]; then
-		aplay -q $dir/e.wav &
-	fi
-	count=0
-	last=$sound
-elif [ $sound = q ] ; then
-	exit 0
-elif [ $sound = w ] ; then
-	aplay -q $dir/enter-stage.wav &
-	sleep 1
-	sudo shutdown -h now
 
-elif [ "$sound" = ' ' ]; then
-	if [ $last = g ] ;then
-		if [ $mode = mario ]; then
-			mode=piano
-			echo "mode = $mode"
-			aplay -q $dir/area_tag.wav &
-		elif [ $mode = piano ]; then
-			mode=mario
-			echo "mode = $mode"
-			aplay -q $dir/area_tag.wav &
+aplay -q $dir/1up.wav
+
+while :
+do
+
+_key()
+{
+  local kp
+  ESC=$'\e'
+  _KEY=
+  read -d '' -sn1 _KEY
+  case $_KEY in
+    "$ESC")
+        while read -d '' -sn1 -t1 kp
+        do
+          _KEY=$_KEY$kp
+          case $kp in
+            [a-zA-NP-Z~]) break;;
+          esac
+        done
+    ;;
+  esac
+  printf -v "${1:-_KEY}" "%s" "$_KEY"
+}
+
+play(){
+ aplay -q $dir/$1.wav 
+}
+
+pianokeys(){
+ for i in a b c d e f 
+ 	do
+	 sleep .05
+	  play $i & 
+ done
+}
+
+
+_key x
+
+case $x in
+  $'w') sound=throw piano=a ; last=w ;;
+  $'a') sound=coin piano=b ; last=a ;;
+  $'s') sound=fireball ; piano=c ; last=s ;;
+  $'d') sound=jump ; piano=d ; last=d ;;
+  $'f') sound=kick ; piano=e ; last=f ;;
+  $'g') sound=mip ; piano=f ; last=g ;;
+  $'\e[A' ) pianokeys ; mode=piano ; last=up ;;
+  $'\e[B' ) sound=yoshi ; mode=mario ; last=down ;;
+  $'\e[C' ) sound=inventory ; last=right ;;
+  $'\e[D' ) sound=inventory ; last=left ;;
+  ?) sound=death ; piano=death;;
+esac
+
+if [ "$x" = '' ] && [ "$last" = "up" ] ; then
+	ip=$(ip addr | grep 'state UP' -A2 |tail -n1 |awk -F 'inet |/' '{print $2}')
+        sudo espeak -ven+f3 -k5 -s150 "$ip" 2>/dev/null
+	continue
+elif [ "$x" = '' ] ; then
+	play enter-stage
+	echo "shutdown -h now"
+	exit 0 
+fi
+
+if [ $mode = mario ]; then
+	if [ $x = s ] ; then
+		if [ $banana = $rand ]; then
+			play banana &
+			banana=0
+			rand=$(( ( RANDOM % 25 )  + 15 ))
+		else
+			play $sound &
+			(( banana++ ))
 		fi
 	else
-		ip=$(ip addr|grep "inet "|grep -v 127.0.0.1|awk '{print $2}'|awk -F/ '{print $1}'|grep -v ^$|head -n1)
-		if [ $count = 0 ];then
-			sudo espeak -ven+f3 -k5 -s100 "$ip" 2>/dev/null
-			count=1
-			sleep 1
-		fi
+		play $sound &
 	fi
+elif [ $mode = piano ]; then
+	play $piano &
 fi
+
 done

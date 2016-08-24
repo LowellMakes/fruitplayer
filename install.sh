@@ -25,5 +25,7 @@ cp -v fruitplayer /usr/bin/
 echo -e "\nDone. You can now delete this directory\n"
 
 echo -e "To run fruitplayer, type \"fruitplayer\" into your terminal\n"
-echo -e "Hit a s d f or g on your keyboard to play the sounds\n"
-echo -e "To exit fruitplayer, hit q or press CTRL+C\n"
+echo -e "Hit w a s d f or g on your keyboard to play the sounds\n"
+echo -e "Press the UP or DOWN arrows to switch between piano and mario modes respectively\n"
+echo -e "Press the UP arrow and then [space] to announce your ip address"
+echo -e "To exit fruitplayer, Press [space] or press CTRL+C"
