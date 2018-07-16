@@ -17,7 +17,7 @@ fi
 
 echo -e "Copying sounds to /usr/share/sounds/fruitplayer...\n"
 mkdir -p /usr/share/sounds/fruitplayer/
-cp -v *.wav /usr/share/sounds/fruitplayer/
+cp -v sfx/*.wav /usr/share/sounds/fruitplayer/
 
 echo -e "\nCopying fruitplayer binary to /usr/bin/...\n"
 cp -v fruitplayer /usr/bin/
