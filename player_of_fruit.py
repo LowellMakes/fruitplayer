@@ -75,23 +75,20 @@ try:
                   #sleep(0.5)
               if(i == 10):
                   source_folder = channels[current_channel]
-                  print("Sample: " + str(i))
                   song = "/home/pi/fruitplayer/sfx/" + source_folder + "/" + str(i) + ".wav"
-
                   sound = pygame.mixer.Sound(song)
                   sound.play(0)
+                  print("Sample: " + str(i))
                   time.sleep(3)
-
                   subprocess.Popen(shutdown_command.split())
 
               else:
 
                   source_folder = channels[current_channel]
-                  print("Sample: " + str(i))
                   song = "/home/pi/fruitplayer/sfx/" + source_folder + "/" + str(i) + ".wav"
-
                   sound = pygame.mixer.Sound(song)
                   sound.play(0)
+                  print("Sample: " + str(i))
 
             if not current_touched & pin_bit and last_touched & pin_bit:
                 print('{0} released!'.format(i))
