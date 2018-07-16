@@ -82,7 +82,7 @@ try:
               if(i == 10):
                   sound.play(0)
                   print("Sample: " + str(i))
-                  sleep(5)
+                  sleep(2)
                   subprocess.Popen(shutdown_command.split())
 
               else:
