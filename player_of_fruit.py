@@ -66,27 +66,25 @@ try:
             pin_bit = 1 << i
             # Check if the sound switching key has been pressed, if so, increment the offset by 12.
             # First check if transitioned from not touched to touched.
+
             if current_touched & pin_bit and not last_touched & pin_bit:
+
+              source_folder = channels[current_channel]
+              song = "/home/pi/fruitplayer/sfx/" + source_folder + "/" + str(i) + ".wav"
+              sound = pygame.mixer.Sound(song)
               print('{0} touched!'.format(i))
+
               if(i == 11):
-
                   change_sounds()
+                  sleep(0.5)
 
-                  #sleep(0.5)
               if(i == 10):
-                  source_folder = channels[current_channel]
-                  song = "/home/pi/fruitplayer/sfx/" + source_folder + "/" + str(i) + ".wav"
-                  sound = pygame.mixer.Sound(song)
                   sound.play(0)
                   print("Sample: " + str(i))
                   time.sleep(3)
                   subprocess.Popen(shutdown_command.split())
 
               else:
-
-                  source_folder = channels[current_channel]
-                  song = "/home/pi/fruitplayer/sfx/" + source_folder + "/" + str(i) + ".wav"
-                  sound = pygame.mixer.Sound(song)
                   sound.play(0)
                   print("Sample: " + str(i))
 
