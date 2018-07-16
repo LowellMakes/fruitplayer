@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+import subprocess
 import signal
 import sys
 from time import sleep
@@ -81,7 +82,7 @@ try:
               if(i == 10):
                   sound.play(0)
                   print("Sample: " + str(i))
-                  time.sleep(3)
+                  sleep(5)
                   subprocess.Popen(shutdown_command.split())
 
               else:
