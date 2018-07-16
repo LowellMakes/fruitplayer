@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
 import sys
 import time
 import subprocess
@@ -55,30 +56,30 @@ pygame.init()
 # more .wav files are found in /usr/share/scratch/Media/Sounds/ that work fine this example uses Aniamal sounds.
 
 SOUND_MAPPING= {
-  0: '/opt/sonic-pi/etc/samples/ambi_piano.wav',
-  1: '/opt/sonic-pi/etc/samples/elec_hollow_kick.wav',
-  2: '/opt/sonic-pi/etc/samples/ambi_soft_buzz.wav',
-  3: '/opt/sonic-pi/etc/samples/bass_dnb_f.wav',
-  4: '/opt/sonic-pi/etc/samples/bass_hit_c.wav',
-  5: '/opt/sonic-pi/etc/samples/elec_plip.wav',
-  6: '/opt/sonic-pi/etc/samples/bass_trance_c.wav',
-  7: '/opt/sonic-pi/etc/samples/vinyl_backspin.wav',
-  8: '/opt/sonic-pi/etc/samples/elec_soft_kick.wav',
-  9: '/opt/sonic-pi/etc/samples/elec_tick.wav',
-  10: '/opt/sonic-pi/etc/samples/vinyl_rewind.wav',
-  11: '/opt/sonic-pi/etc/samples/elec_twang.wav',
-  12: '/usr/share/scratch/Media/Sounds/Animal/Bird.wav',
-  13: '/usr/share/scratch/Media/Sounds/Animal/Cricket.wav',
-  14: '/usr/share/scratch/Media/Sounds/Animal/Dog1.wav',
-  15: '/usr/share/scratch/Media/Sounds/Animal/Dog2.wav',
-  16: '/usr/share/scratch/Media/Sounds/Animal/Duck.wav',
-  17: '/usr/share/scratch/Media/Sounds/Animal/Goose.wav',
-  18: '/usr/share/scratch/Media/Sounds/Animal/Horse.wav',
-  19: '/usr/share/scratch/Media/Sounds/Animal/Kitten.wav',
-  20: '/usr/share/scratch/Media/Sounds/Animal/Meow.wav',
-  21: '/usr/share/scratch/Media/Sounds/Animal/Owl.wav',
-  22: '/usr/share/scratch/Media/Sounds/Animal/Rooster.wav',
-  23: '/usr/share/scratch/Media/Sounds/Animal/WolfHowl.wav',
+  0: '/usr/share/sounds/fruitplayer/1up.wav',
+  1: '/usr/share/sounds/fruitplayer/coin.wav',
+  2: '/usr/share/sounds/fruitplayer/fireball.wav',
+  3: '/usr/share/sounds/fruitplayer/jump.wav',
+  4: '/usr/share/sounds/fruitplayer/kick.wav',
+  5: '/usr/share/sounds/fruitplayer/mip.wav',
+  6: '/usr/share/sounds/fruitplayer/Horse.wav',
+  7: '/usr/share/sounds/fruitplayer/Kitten.wav',
+  8: '/usr/share/sounds/fruitplayer/Meow.wav',
+  9: '/usr/share/sounds/fruitplayer/Owl.wav',
+  10: '/usr/share/sounds/fruitplayer/enter-stage.wav',
+  11: '/usr/share/sounds/fruitplayer/area_tag.wav',
+  12: '/opt/sonic-pi/etc/samples/drum_bass_hard.wav',
+  13: '/opt/sonic-pi/etc/samples/elec_hollow_kick.wav',
+  14: '/opt/sonic-pi/etc/samples/ambi_soft_buzz.wav',
+  15: '/opt/sonic-pi/etc/samples/bass_dnb_f.wav',
+  16: '/opt/sonic-pi/etc/samples/bass_hit_c.wav',
+  17: '/opt/sonic-pi/etc/samples/elec_plip.wav',
+  18: '/opt/sonic-pi/etc/samples/bass_trance_c.wav',
+  19: '/opt/sonic-pi/etc/samples/vinyl_backspin.wav',
+  20: '/opt/sonic-pi/etc/samples/elec_soft_kick.wav',
+  21: '/opt/sonic-pi/etc/samples/elec_tick.wav',
+  22: '/usr/share/sounds/fruitplayer/enter-stage.wav',
+  23: '/opt/sonic-pi/etc/samples/elec_twang.wav',
 }
 
 
@@ -88,12 +89,13 @@ for key,soundfile in SOUND_MAPPING.iteritems():
         sounds[key] =  pygame.mixer.Sound(soundfile)
         sounds[key].set_volume(1);
 
-shutdown_command = '/usr/bin/sudo /sbin/shutdown -r now'
+shutdown_command = '/usr/bin/sudo /sbin/shutdown -h now'
 
 # Main loop to print a message every time a pin is touched.
 print('Press Ctrl-C to quit.')
 last_touched = cap.touched()
 offset = 0
+sounds[0].play()
 while True:
     current_touched = cap.touched()
     # Check each pin's last and current state to see if it was pressed or released.
@@ -111,6 +113,8 @@ while True:
                 print('changing offset to {0}'.format(offset)) 
             if i == 10:
                 subprocess.Popen(shutdown_command.split())
+                sounds[i + offset].play()
+                time.sleep(3)
             if (sounds[i + offset]):
                 print('playing sound {0}'.format(i + offset))
                 sounds[i + offset].play()
