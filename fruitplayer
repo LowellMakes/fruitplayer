@@ -38,7 +38,7 @@ collection = "mario"
 channels = ["mario", "piano"]
 num_channels = len(channels) - 1
 current_channel = 0
-subprocess.Popen(["aplay", sound_folder + collection + glob.glob('/0*.wav')], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+subprocess.Popen(["aplay", glob.glob(sound_folder + collection + "/0*.wav")[0]], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 # LET DECISIONS HAPPEN!
@@ -69,7 +69,7 @@ try:
             if current_touched & pin_bit and not last_touched & pin_bit:
 
               collection = channels[current_channel]
-              song = sound_folder + collection + "/" + str(i) + "*.wav"
+              song = glob.glob(sound_folder + collection + "/" + str(i) + "*.wav")[0]
               print('{0} touched!'.format(i))
 
               if(i == 11):
