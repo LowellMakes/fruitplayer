@@ -17,15 +17,9 @@ fi
 
 echo -e "Copying sounds to /usr/share/sounds/fruitplayer...\n"
 mkdir -p /usr/share/sounds/fruitplayer/
-cp -v sfx/*.wav /usr/share/sounds/fruitplayer/
+cp -rv sfx/* /usr/share/sounds/fruitplayer/
 
 echo -e "\nCopying fruitplayer binary to /usr/bin/...\n"
 cp -v fruitplayer /usr/bin/
 
 echo -e "\nDone. You can now delete this directory\n"
-
-echo -e "To run fruitplayer, type \"fruitplayer\" into your terminal\n"
-echo -e "Hit w a s d f or g on your keyboard to play the sounds\n"
-echo -e "Press the UP or DOWN arrows to switch between piano and mario modes respectively\n"
-echo -e "Press the UP arrow and then [space] to announce your ip address"
-echo -e "To exit fruitplayer, Press [space] or press CTRL+C"

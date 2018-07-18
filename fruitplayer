@@ -32,7 +32,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 # LET THERE BE MUSIC!
-sound_folder = "/home/pi/fruitplayer/sfx/"
+sound_folder = "/usr/share/sounds/fruitplayer/"
 collection = "mario"
 channels = ["mario", "piano"]
 num_channels = len(channels) - 1
