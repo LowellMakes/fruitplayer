@@ -11,6 +11,11 @@ exitcode=$?
 if [ $exitcode = 1 ] ; then
 	echo -e "aplay not found, installing aplay...\n"
 	apt-get install alsa-utils
+	exitcode=$?
+	if [ $exitcode != 0 ] ;then
+		echo "Not able to install aplay. Exiting.."
+		exit 0
+	fi
 elif [ $exitcode = 0 ]; then
 	echo -e "aplay found in $(which aplay)\n"
 fi
