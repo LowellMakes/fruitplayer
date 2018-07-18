@@ -27,7 +27,7 @@ echo "[Unit]
 Description=Fruitplayer
 
 [Service]
-Type=forking
+Type=simple
 ExecStart=/usr/bin/fruitplayer
 
 [Install]
