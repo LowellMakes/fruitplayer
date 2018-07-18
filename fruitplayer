@@ -1,12 +1,12 @@
 #!/bin/bash
 mode=mario
-dir=/home/pi/fruitplayer/sfx/
 #dir=/usr/share/sounds/fruitplayer/sfx/
+sounddir=/home/pi/fruitplayer/sfx
 count=0
 banana=0
 rand=$(( ( RANDOM % 25 )  + 15 ))
 
-aplay -q $dir/mario/1up.wav
+aplay -q $sounddir/mario/1up.wav
 
 while :
 do
@@ -36,9 +36,10 @@ play(){
 }
 
 pianokeys(){
- for i in a b c d e f 
+ dir=$sounddir/piano
+ for i in a bb b cc c d e f 
  	do
-	 sleep .05
+	 sleep .5
 	  play $i & 
  done
 }
@@ -47,17 +48,17 @@ pianokeys(){
 _key x
 
 case $x in
-  $'w') sound=mario/throw piano=piano/a ; last=w ;;
-  $'a') sound=mario/coin piano=piano/b ; last=a ;;
-  $'s') sound=mario/fireball ; piano=piano/c ; last=s ;;
-  $'d') sound=mario/jump ; piano=piano/d ; last=d ;;
-  $'f') sound=mario/kick ; piano=piano/e ; last=f ;;
-  $'g') sound=mario/mip ; piano=piano/f ; last=g ;;
-  $'\e[A' ) pianokeys ; mode=piano ; last=up ;;
-  $'\e[B' ) sound=mario/yoshi ; mode=mario ; last=down ;;
-  $'\e[C' ) sound=mario/inventory ; last=right ;;
-  $'\e[D' ) sound=mario/inventory ; last=left ;;
-  ?) sound=mario/death ; piano=piano/death;;
+  $'w') sound=throw piano=a ; last=w ;;
+  $'a') sound=coin piano=b ; last=a ;;
+  $'s') sound=fireball ; piano=c ; last=s ;;
+  $'d') sound=jump ; piano=d ; last=d ;;
+  $'f') sound=kick ; piano=e ; last=f ;;
+  $'g') sound=mip ; piano=f ; last=g ;;
+  $'\e[A' ) mode=piano ; pianokeys ; last=up ;;
+  $'\e[B' ) mode=mario ; sound=area_tag ; last=down ;;
+  $'\e[C' ) sound=inventory ; last=right ;;
+  $'\e[D' ) sound=inventory ; last=left ;;
+  ?) sound=death ; piano=death;;
 esac
 
 if [ "$x" = '' ] && [ "$last" = "up" ] ; then
@@ -65,12 +66,13 @@ if [ "$x" = '' ] && [ "$last" = "up" ] ; then
         sudo espeak -ven+f3 -k5 -s150 "$ip" 2>/dev/null
 	continue
 elif [ "$x" = '' ] ; then
-	play mario/enter-stage
-	shutdown -h now
+	play enter-stage
+echo "	shutdown -h now"
 	exit 0 
 fi
 
 if [ $mode = mario ]; then
+	dir=$sounddir/mario
 	if [ $x = s ] ; then
 		if [ $banana = $rand ]; then
 			play banana &
@@ -84,6 +86,7 @@ if [ $mode = mario ]; then
 		play $sound &
 	fi
 elif [ $mode = piano ]; then
+	dir=$sounddir/piano
 	play $piano &
 fi
 
