@@ -10,7 +10,7 @@ which aplay >/dev/null
 exitcode=$?
 if [ $exitcode = 1 ] ; then
 	echo -e "aplay not found, installing aplay...\n"
-	apt-get install also-utils
+	apt-get install alsa-utils
 elif [ $exitcode = 0 ]; then
 	echo -e "aplay found in $(which aplay)\n"
 fi

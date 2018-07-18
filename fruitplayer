@@ -1,89 +1,100 @@
-#!/bin/bash
-mode=mario
-dir=/usr/share/sounds/fruitplayer
-count=0
-banana=0
-rand=$(( ( RANDOM % 25 )  + 15 ))
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-aplay -q $dir/1up.wav
+#import pygame
+import subprocess
+import signal
+import sys
+from time import sleep
+import Adafruit_MPR121.MPR121 as MPR121
 
-while :
-do
+print("""
+==============================
+  Fruit Piano? FRUIT PIANO!
+==============================
+""")
 
-_key()
-{
-  local kp
-  ESC=$'\e'
-  _KEY=
-  read -d '' -sn1 _KEY
-  case $_KEY in
-    "$ESC")
-        while read -d '' -sn1 -t1 kp
-        do
-          _KEY=$_KEY$kp
-          case $kp in
-            [a-zA-NP-Z~]) break;;
-          esac
-        done
-    ;;
-  esac
-  printf -v "${1:-_KEY}" "%s" "$_KEY"
-}
+shutdown_command = '/usr/bin/sudo /sbin/shutdown -h now'
 
-play(){
- aplay -q $dir/$1.wav 
-}
+# Create MPR121 instance.
+cap = MPR121.MPR121()
 
-pianokeys(){
- for i in a b c d e f 
- 	do
-	 sleep .05
-	  play $i & 
- done
-}
+# Initialize communication with MPR121 using default I2C bus of device, and
+# default I2C address (0x5A).  On BeagleBone Black will default to I2C bus 0.
+if not cap.begin():
+    print('Error initializing MPR121.  Check your wiring!')
+    sys.exit(1)
+
+# handle ctrl+c gracefully
+def signal_handler(signal, frame):
+  sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+# LET THERE BE MUSIC!
+sound_folder = "/home/pi/fruitplayer/sfx/"
+collection = "mario"
+channels = ["mario", "piano"]
+num_channels = len(channels) - 1
+current_channel = 0
+subprocess.Popen(["aplay", sound_folder + collection + "/0.wav"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-_key x
+# LET DECISIONS HAPPEN!
+def change_sounds():
+    global current_channel
+    next_channel = current_channel + 1
 
-case $x in
-  $'w') sound=throw piano=a ; last=w ;;
-  $'a') sound=coin piano=b ; last=a ;;
-  $'s') sound=fireball ; piano=c ; last=s ;;
-  $'d') sound=jump ; piano=d ; last=d ;;
-  $'f') sound=kick ; piano=e ; last=f ;;
-  $'g') sound=mip ; piano=f ; last=g ;;
-  $'\e[A' ) pianokeys ; mode=piano ; last=up ;;
-  $'\e[B' ) sound=yoshi ; mode=mario ; last=down ;;
-  $'\e[C' ) sound=inventory ; last=right ;;
-  $'\e[D' ) sound=inventory ; last=left ;;
-  ?) sound=death ; piano=death;;
-esac
+    if(next_channel > num_channels):
+        next_channel = 0
 
-if [ "$x" = '' ] && [ "$last" = "up" ] ; then
-	ip=$(ip addr | grep 'state UP' -A2 |tail -n1 |awk -F 'inet |/' '{print $2}')
-        sudo espeak -ven+f3 -k5 -s150 "$ip" 2>/dev/null
-	continue
-elif [ "$x" = '' ] ; then
-	play enter-stage
-	echo "shutdown -h now"
-	exit 0 
-fi
+    current_channel = next_channel
+    print("channel: " + str(current_channel) + " / " + channels[current_channel])
 
-if [ $mode = mario ]; then
-	if [ $x = s ] ; then
-		if [ $banana = $rand ]; then
-			play banana &
-			banana=0
-			rand=$(( ( RANDOM % 25 )  + 15 ))
-		else
-			play $sound &
-			(( banana++ ))
-		fi
-	else
-		play $sound &
-	fi
-elif [ $mode = piano ]; then
-	play $piano &
-fi
+last_touched = cap.touched()
 
-done
+try:
+
+    while True:
+        current_touched = cap.touched()
+        # Check each pin's last and current state to see if it was pressed or released.
+        for i in range(12):
+            # Each pin is represented by a bit in the touched value.  A value of 1
+            # means the pin is being touched, and 0 means it is not being touched.
+            pin_bit = 1 << i
+            # Check if the sound switching key has been pressed, if so, increment the offset by 12.
+            # First check if transitioned from not touched to touched.
+
+            if current_touched & pin_bit and not last_touched & pin_bit:
+
+              collection = channels[current_channel]
+              song = sound_folder + collection + "/" + str(i) + ".wav"
+              print('{0} touched!'.format(i))
+
+              if(i == 11):
+                  change_sounds()
+                  sleep(0.5)
+
+              if(i == 10):
+                  subprocess.Popen(["aplay", song], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                  print("Sample: " + str(i))
+                  sleep(2)
+                  subprocess.Popen(shutdown_command.split())
+
+              else:
+                  subprocess.Popen(["aplay", song], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                  print("Sample: " + str(i))
+
+            if not current_touched & pin_bit and last_touched & pin_bit:
+                print('{0} released!'.format(i))
+
+        last_touched = current_touched
+        sleep(0.01)
+
+except KeyboardInterrupt:
+    # kill the piano if the user hits ctrl+c
+    print("""
+==============================
+FRUIT PIANO! OUT!
+==============================
+    """)
