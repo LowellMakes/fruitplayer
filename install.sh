@@ -22,4 +22,19 @@ cp -rv sfx/* /usr/share/sounds/fruitplayer/
 echo -e "\nCopying fruitplayer binary to /usr/bin/...\n"
 cp -v fruitplayer /usr/bin/
 
+echo -e "\nCreating systemd startup unit file...\n"
+echo "[Unit]
+Description=Fruitplayer
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/fruitplayer
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/fruitplayer.service
+systemctl enable fruitplayer
+
+echo -e "\nStarting fruitplayer...\n"
+systemctl start fruitplayer &
+
 echo -e "\nDone. You can now delete this directory\n"
