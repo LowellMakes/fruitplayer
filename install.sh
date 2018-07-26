@@ -34,6 +34,8 @@ Description=Fruitplayer
 [Service]
 Type=simple
 ExecStart=/usr/bin/fruitplayer
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/fruitplayer.service
