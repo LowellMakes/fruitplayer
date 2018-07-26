@@ -35,7 +35,7 @@ signal.signal(signal.SIGINT, signal_handler)
 # LET THERE BE MUSIC!
 sound_folder = "/usr/share/sounds/fruitplayer/"
 collection = "mario"
-channels = ["mario", "piano", "animals"]
+channels = ["mario", "piano", "drumkit", "animals"]
 num_channels = len(channels) - 1
 current_channel = 0
 subprocess.Popen(["aplay", glob.glob(sound_folder + collection + "/0-*.wav")[0]], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
