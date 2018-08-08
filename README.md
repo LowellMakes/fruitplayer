@@ -10,3 +10,7 @@ https://github.com/adafruit/Adafruit_Python_MPR121
 # INSTALL
 
 To install, run install.sh as root or using sudo
+
+# Attribution
+
+Code based off https://github.com/andywarburton/fruit_piano
